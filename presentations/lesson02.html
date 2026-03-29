@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2차시 - 내가 남긴 디지털 발자국을 찾아서</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: #1a1a2e;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            pointer-events: none;
+        }
+        .slide.active { opacity: 1; transform: translateX(0); pointer-events: all; }
+        .slide.prev { opacity: 0; transform: translateX(-100%); }
+
+        /* ===== Slide 1: Title ===== */
+        .slide-1 {
+            background: linear-gradient(135deg, #2d3561 0%, #1e6f5c 50%, #29bb89 100%);
+            text-align: center;
+        }
+        .slide-1 .badge {
+            background: rgba(255,255,255,0.15);
+            color: white;
+            padding: 8px 24px;
+            border-radius: 50px;
+            font-size: 1rem;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+        }
+        .slide-1 h1 {
+            font-size: 3.2rem;
+            color: white;
+            font-weight: 900;
+            line-height: 1.3;
+            margin-bottom: 20px;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+        .slide-1 .subtitle {
+            font-size: 1.4rem;
+            color: rgba(255,255,255,0.85);
+            font-weight: 300;
+        }
+        .slide-1 .footprints {
+            font-size: 4rem;
+            margin-top: 30px;
+            animation: walk 2s infinite;
+        }
+        @keyframes walk {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(10px) rotate(5deg); }
+            75% { transform: translateX(-10px) rotate(-5deg); }
+        }
+
+        /* ===== Slide 2: Learning Objectives ===== */
+        .slide-2 {
+            background: linear-gradient(135deg, #e44d26 0%, #f16529 100%);
+            text-align: left;
+        }
+        .slide-2 h2 { font-size: 2.4rem; color: white; margin-bottom: 36px; width: 100%; }
+        .obj-card {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 22px 30px;
+            margin-bottom: 14px;
+            width: 100%;
+            max-width: 800px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+        }
+        .obj-num {
+            width: 48px; height: 48px;
+            background: linear-gradient(135deg, #2d3561, #1e6f5c);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-size: 1.3rem; font-weight: 700; flex-shrink: 0;
+        }
+        .obj-text { font-size: 1.15rem; color: #333; line-height: 1.5; }
+
+        /* ===== Slide 3: Sand Footprint ===== */
+        .slide-3 {
+            background: linear-gradient(135deg, #f5e6ca 0%, #d4a574 100%);
+            text-align: center;
+        }
+        .slide-3 .sand-emoji { font-size: 6rem; margin-bottom: 24px; }
+        .slide-3 .question-box {
+            background: white;
+            border-radius: 24px;
+            padding: 40px 50px;
+            max-width: 650px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+        }
+        .slide-3 .question-box h2 { font-size: 2rem; color: #5a3921; line-height: 1.5; }
+        .slide-3 .hint { margin-top: 20px; font-size: 1.1rem; color: #8b6914; font-weight: 500; }
+
+        /* ===== Slide 4: What is Digital Footprint ===== */
+        .slide-4 {
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            text-align: center;
+        }
+        .slide-4 h2 { font-size: 2.6rem; color: white; margin-bottom: 36px; }
+        .footprint-def {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 24px;
+            padding: 36px 44px;
+            max-width: 750px;
+            margin-bottom: 30px;
+        }
+        .footprint-def p {
+            font-size: 1.4rem; color: white; line-height: 1.7;
+        }
+        .footprint-def .hl { color: #29bb89; font-weight: 700; }
+        .fp-types {
+            display: flex; gap: 24px; max-width: 750px; width: 100%;
+        }
+        .fp-type {
+            flex: 1;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 28px 24px;
+            border: 1px solid rgba(255,255,255,0.15);
+            text-align: center;
+        }
+        .fp-type .type-icon { font-size: 2.5rem; margin-bottom: 12px; }
+        .fp-type h3 { color: #29bb89; font-size: 1.2rem; margin-bottom: 10px; }
+        .fp-type p { color: rgba(255,255,255,0.8); font-size: 0.95rem; line-height: 1.5; }
+
+        /* ===== Slide 5: Sua's Day ===== */
+        .slide-5 {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fdfcfb 100%);
+            text-align: center;
+        }
+        .slide-5 h2 { font-size: 2.2rem; color: #6a3093; margin-bottom: 30px; }
+        .timeline {
+            display: flex; flex-direction: column; gap: 14px;
+            max-width: 700px; width: 100%;
+        }
+        .timeline-item {
+            display: flex; align-items: center; gap: 16px;
+            background: white;
+            border-radius: 16px;
+            padding: 18px 24px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+        }
+        .timeline-item .time-icon { font-size: 2rem; flex-shrink: 0; }
+        .timeline-item .time-label {
+            font-weight: 700; color: #6a3093;
+            min-width: 60px; font-size: 0.95rem;
+        }
+        .timeline-item .time-action { font-size: 1.05rem; color: #555; flex: 1; }
+        .timeline-item .time-trail {
+            background: #ffe0e0; color: #c0392b;
+            padding: 6px 14px; border-radius: 20px;
+            font-size: 0.85rem; font-weight: 500; white-space: nowrap;
+        }
+
+        /* ===== Slide 6: Can we erase? ===== */
+        .slide-6 {
+            background: linear-gradient(135deg, #c31432 0%, #240b36 100%);
+            text-align: center;
+        }
+        .slide-6 .big-q { font-size: 5rem; margin-bottom: 16px; }
+        .slide-6 h2 { font-size: 2.6rem; color: white; margin-bottom: 30px; line-height: 1.4; }
+        .slide-6 .answer-box {
+            background: rgba(255,255,255,0.12);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 20px;
+            padding: 30px 40px;
+            max-width: 600px;
+        }
+        .slide-6 .answer-box p {
+            font-size: 1.3rem; color: white; line-height: 1.7;
+        }
+        .slide-6 .answer-box .key-msg {
+            color: #ff6b6b; font-weight: 700; font-size: 1.5rem;
+            display: block; margin-top: 12px;
+        }
+
+        /* ===== Slide 7: Activity - My Map ===== */
+        .slide-7 {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            text-align: center;
+        }
+        .slide-7 h2 { font-size: 2.4rem; color: white; margin-bottom: 30px; text-shadow: 0 2px 10px rgba(0,0,0,0.15); }
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            max-width: 700px; width: 100%;
+        }
+        .cat-card {
+            background: white;
+            border-radius: 18px;
+            padding: 24px 16px;
+            text-align: center;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        .cat-card:hover { transform: translateY(-6px); }
+        .cat-card .cat-icon { font-size: 2.5rem; margin-bottom: 10px; }
+        .cat-card .cat-name { font-size: 1.1rem; font-weight: 700; color: #333; margin-bottom: 6px; }
+        .cat-card .cat-hint { font-size: 0.85rem; color: #999; }
+
+        /* ===== Slide 8: Good vs Bad ===== */
+        .slide-8 {
+            background: linear-gradient(135deg, #4568dc 0%, #b06ab3 100%);
+            text-align: center;
+        }
+        .slide-8 h2 { font-size: 2.4rem; color: white; margin-bottom: 30px; }
+        .gb-container {
+            display: flex; gap: 24px; max-width: 800px; width: 100%;
+        }
+        .gb-col {
+            flex: 1;
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 28px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .gb-col h3 {
+            font-size: 1.4rem; margin-bottom: 16px;
+            padding-bottom: 12px; border-bottom: 3px solid;
+            text-align: center;
+        }
+        .gb-col.good h3 { color: #27ae60; border-color: #27ae60; }
+        .gb-col.bad h3 { color: #e74c3c; border-color: #e74c3c; }
+        .gb-item {
+            display: flex; align-items: flex-start; gap: 10px;
+            padding: 10px 0;
+            font-size: 1rem; color: #555; line-height: 1.4;
+        }
+        .gb-item .mark { font-size: 1.2rem; flex-shrink: 0; }
+
+        /* ===== Slide 9: Declaration ===== */
+        .slide-9 {
+            background: linear-gradient(135deg, #f7971e 0%, #ffd200 100%);
+            text-align: center;
+        }
+        .slide-9 h2 { font-size: 2.4rem; color: #5a3921; margin-bottom: 30px; }
+        .declaration-box {
+            background: white;
+            border-radius: 24px;
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+            text-align: left;
+        }
+        .declaration-box .dec-title {
+            font-size: 1.4rem; font-weight: 700; color: #e67e22;
+            text-align: center; margin-bottom: 24px;
+        }
+        .declaration-box .dec-item {
+            display: flex; align-items: flex-start; gap: 12px;
+            padding: 12px 0;
+            font-size: 1.1rem; color: #444; line-height: 1.5;
+            border-bottom: 1px dashed #eee;
+        }
+        .declaration-box .dec-item:last-child { border-bottom: none; }
+        .declaration-box .dec-num {
+            background: #f7971e; color: white;
+            width: 28px; height: 28px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.85rem; font-weight: 700; flex-shrink: 0;
+        }
+
+        /* ===== Slide 10: Summary ===== */
+        .slide-10 {
+            background: linear-gradient(135deg, #2d3561 0%, #1e6f5c 50%, #29bb89 100%);
+            text-align: center;
+        }
+        .slide-10 h2 { font-size: 2.6rem; color: white; margin-bottom: 36px; }
+        .sum-cards {
+            display: flex; gap: 18px; max-width: 900px;
+        }
+        .sum-card {
+            background: white;
+            border-radius: 20px;
+            padding: 28px 22px;
+            flex: 1;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .sum-card .sum-icon { font-size: 2.5rem; margin-bottom: 14px; }
+        .sum-card p { font-size: 1.05rem; color: #444; line-height: 1.6; }
+        .sum-card strong { color: #1e6f5c; }
+
+        /* ===== Slide 11: Next Class ===== */
+        .slide-11 {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            text-align: center;
+        }
+        .slide-11 .next-icon { font-size: 5rem; margin-bottom: 16px; }
+        .slide-11 h2 { font-size: 2.4rem; color: white; margin-bottom: 14px; }
+        .slide-11 .next-title { font-size: 1.5rem; color: rgba(255,255,255,0.9); margin-bottom: 24px; }
+        .slide-11 .next-box {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 28px 36px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .slide-11 .next-box p { font-size: 1.25rem; color: white; line-height: 1.6; }
+        .slide-11 .closing {
+            margin-top: 30px;
+            font-size: 1.2rem;
+            color: rgba(255,255,255,0.8);
+            font-style: italic;
+        }
+
+        /* ===== Navigation ===== */
+        .nav-controls {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            z-index: 100;
+        }
+        .nav-btn {
+            width: 50px; height: 50px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255,255,255,0.3);
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.3s;
+        }
+        .nav-btn:hover { background: rgba(255,255,255,0.35); transform: scale(1.1); }
+        .slide-counter {
+            color: white; font-size: 1rem; font-weight: 500;
+            background: rgba(0,0,0,0.2);
+            padding: 8px 16px; border-radius: 20px;
+        }
+        .progress-bar {
+            position: fixed; top: 0; left: 0;
+            height: 4px;
+            background: rgba(255,255,255,0.8);
+            transition: width 0.3s;
+            z-index: 100;
+        }
+
+        @media (max-width: 768px) {
+            .slide { padding: 30px; }
+            .slide-1 h1 { font-size: 2rem; }
+            h2 { font-size: 1.8rem !important; }
+            .fp-types, .gb-container, .sum-cards { flex-direction: column; }
+            .category-grid { grid-template-columns: repeat(2, 1fr); }
+            .timeline-item .time-trail { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-bar" id="progressBar"></div>
+
+    <!-- Slide 1: Title -->
+    <div class="slide slide-1 active" data-slide="1">
+        <div class="badge">2차시 · 디지털 발자국</div>
+        <h1>내가 남긴<br>디지털 발자국을 찾아서</h1>
+        <div class="subtitle">경기도 안양시 초등학교 디지털 시민 역량교육</div>
+        <div class="footprints">👣 🔍 💻</div>
+    </div>
+
+    <!-- Slide 2: Learning Objectives -->
+    <div class="slide slide-2" data-slide="2">
+        <h2>📚 오늘의 학습 목표</h2>
+        <div class="obj-card">
+            <div class="obj-num">1</div>
+            <div class="obj-text">디지털 발자국의 의미를 이해하고 설명할 수 있다.</div>
+        </div>
+        <div class="obj-card">
+            <div class="obj-num">2</div>
+            <div class="obj-text">내가 남긴 디지털 발자국의 종류를 찾아볼 수 있다.</div>
+        </div>
+        <div class="obj-card">
+            <div class="obj-num">3</div>
+            <div class="obj-text">긍정적인 디지털 발자국을 남기는 방법을 알 수 있다.</div>
+        </div>
+    </div>
+
+    <!-- Slide 3: Sand Footprint -->
+    <div class="slide slide-3" data-slide="3">
+        <div class="sand-emoji">🏖️</div>
+        <div class="question-box">
+            <h2>모래사장에 남은 발자국을 보면<br>무엇을 알 수 있을까요?</h2>
+            <div class="hint">💡 크기, 방향, 몇 명인지... 그런데 인터넷에서도 발자국이 남는다고?</div>
+        </div>
+    </div>
+
+    <!-- Slide 4: What is Digital Footprint -->
+    <div class="slide slide-4" data-slide="4">
+        <h2>👣 디지털 발자국이란?</h2>
+        <div class="footprint-def">
+            <p>디지털 발자국이란 우리가<br><span class="hl">인터넷을 사용하면서 남기는 모든 흔적</span>이에요.</p>
+        </div>
+        <div class="fp-types">
+            <div class="fp-type">
+                <div class="type-icon">✍️</div>
+                <h3>능동적 발자국</h3>
+                <p>내가 직접 남기는 것<br>게시글, 댓글, 사진 업로드,<br>동영상 올리기 등</p>
+            </div>
+            <div class="fp-type">
+                <div class="type-icon">👁️</div>
+                <h3>수동적 발자국</h3>
+                <p>나도 모르게 남겨지는 것<br>방문 기록, 검색 기록,<br>위치 정보, 쿠키 등</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 5: Sua's Digital Day -->
+    <div class="slide slide-5" data-slide="5">
+        <h2>📖 수아의 디지털 하루</h2>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="time-icon">🌅</div>
+                <div class="time-label">아침</div>
+                <div class="time-action">유튜브에서 음악 듣기</div>
+                <div class="time-trail">시청 기록 남음</div>
+            </div>
+            <div class="timeline-item">
+                <div class="time-icon">🚶</div>
+                <div class="time-label">등교</div>
+                <div class="time-action">카카오톡으로 친구에게 메시지</div>
+                <div class="time-trail">대화 기록 남음</div>
+            </div>
+            <div class="timeline-item">
+                <div class="time-icon">🍱</div>
+                <div class="time-label">점심</div>
+                <div class="time-action">학교 급식 사진 SNS에 올리기</div>
+                <div class="time-trail">게시물+위치 남음</div>
+            </div>
+            <div class="timeline-item">
+                <div class="time-icon">🎮</div>
+                <div class="time-label">방과후</div>
+                <div class="time-action">온라인 게임 접속</div>
+                <div class="time-trail">접속+채팅 기록</div>
+            </div>
+            <div class="timeline-item">
+                <div class="time-icon">🔍</div>
+                <div class="time-label">저녁</div>
+                <div class="time-action">숙제를 위해 인터넷 검색</div>
+                <div class="time-trail">검색 기록 남음</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 6: Can we erase? -->
+    <div class="slide slide-6" data-slide="6">
+        <div class="big-q">❓</div>
+        <h2>디지털 발자국은<br>지울 수 있을까요?</h2>
+        <div class="answer-box">
+            <p>한 번 인터넷에 올린 글, 사진, 영상은<br>
+            다른 사람이 저장하거나 캡처할 수 있어요.</p>
+            <span class="key-msg">한 번 남긴 디지털 발자국은<br>완전히 지우기 매우 어렵습니다!</span>
+        </div>
+    </div>
+
+    <!-- Slide 7: Activity - My Footprint Map -->
+    <div class="slide slide-7" data-slide="7">
+        <h2>✏️ 활동: 나의 디지털 발자국 지도</h2>
+        <div class="category-grid">
+            <div class="cat-card">
+                <div class="cat-icon">💬</div>
+                <div class="cat-name">메신저/채팅</div>
+                <div class="cat-hint">카카오톡, 라인 등</div>
+            </div>
+            <div class="cat-card">
+                <div class="cat-icon">📺</div>
+                <div class="cat-name">영상 시청</div>
+                <div class="cat-hint">유튜브, 넷플릭스 등</div>
+            </div>
+            <div class="cat-card">
+                <div class="cat-icon">🎮</div>
+                <div class="cat-name">게임</div>
+                <div class="cat-hint">로블록스, 마크 등</div>
+            </div>
+            <div class="cat-card">
+                <div class="cat-icon">🔍</div>
+                <div class="cat-name">검색</div>
+                <div class="cat-hint">네이버, 구글 등</div>
+            </div>
+            <div class="cat-card">
+                <div class="cat-icon">📸</div>
+                <div class="cat-name">SNS/게시글</div>
+                <div class="cat-hint">인스타그램, 틱톡 등</div>
+            </div>
+            <div class="cat-card">
+                <div class="cat-icon">📦</div>
+                <div class="cat-name">기타</div>
+                <div class="cat-hint">쇼핑, 음악, 앱 등</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 8: Good vs Bad Footprint -->
+    <div class="slide slide-8" data-slide="8">
+        <h2>⭕ 좋은 발자국 vs ❌ 나쁜 발자국</h2>
+        <div class="gb-container">
+            <div class="gb-col good">
+                <h3>✅ 좋은 발자국</h3>
+                <div class="gb-item"><span class="mark">💚</span> 친구의 멋진 그림에 응원 댓글을 남겼다</div>
+                <div class="gb-item"><span class="mark">💚</span> 유용한 정보를 정리해 블로그에 올렸다</div>
+                <div class="gb-item"><span class="mark">💚</span> 좋아하는 책을 추천하는 글을 썼다</div>
+                <div class="gb-item"><span class="mark">💚</span> 환경 보호 캠페인에 참여했다</div>
+            </div>
+            <div class="gb-col bad">
+                <h3>❌ 나쁜 발자국</h3>
+                <div class="gb-item"><span class="mark">💔</span> 화가 나서 친구 험담을 채팅에 썼다</div>
+                <div class="gb-item"><span class="mark">💔</span> 모르는 사람에게 사진과 학교를 알려줬다</div>
+                <div class="gb-item"><span class="mark">💔</span> 가짜 정보를 확인 없이 공유했다</div>
+                <div class="gb-item"><span class="mark">💔</span> 다른 사람의 사진을 무단으로 올렸다</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 9: Declaration -->
+    <div class="slide slide-9" data-slide="9">
+        <h2>📝 나의 좋은 발자국 선언문</h2>
+        <div class="declaration-box">
+            <div class="dec-title">앞으로 내가 남기고 싶은 좋은 디지털 발자국</div>
+            <div class="dec-item">
+                <div class="dec-num">1</div>
+                <div>친구들에게 따뜻한 응원의 말을 남기겠습니다.</div>
+            </div>
+            <div class="dec-item">
+                <div class="dec-num">2</div>
+                <div>확인된 정보만 공유하겠습니다.</div>
+            </div>
+            <div class="dec-item">
+                <div class="dec-num">3</div>
+                <div>나의 재능과 좋아하는 것을 긍정적으로 표현하겠습니다.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 10: Summary -->
+    <div class="slide slide-10" data-slide="10">
+        <h2>📌 오늘 배운 내용 정리</h2>
+        <div class="sum-cards">
+            <div class="sum-card">
+                <div class="sum-icon">👣</div>
+                <p><strong>디지털 발자국</strong>이란<br>인터넷을 사용하면서<br>남기는 모든 흔적이다.</p>
+            </div>
+            <div class="sum-card">
+                <div class="sum-icon">✍️👁️</div>
+                <p>내가 <strong>직접 남기는 것</strong>과<br><strong>자동으로 남는 것</strong><br>두 종류가 있다.</p>
+            </div>
+            <div class="sum-card">
+                <div class="sum-icon">⚠️</div>
+                <p>한 번 남긴 발자국은<br><strong>지우기 매우 어렵다!</strong></p>
+            </div>
+            <div class="sum-card">
+                <div class="sum-icon">🌟</div>
+                <p>미래의 나를 위해<br><strong>좋은 디지털 발자국</strong>을<br>남기도록 노력하자!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 11: Next Class -->
+    <div class="slide slide-11" data-slide="11">
+        <div class="next-icon">🔐</div>
+        <h2>다음 시간 예고</h2>
+        <div class="next-title">3차시: 나의 소중한 정보, 어떻게 지킬까?</div>
+        <div class="next-box">
+            <p>"내 이름, 전화번호, 학교 이름...<br>이 소중한 정보를 안전하게 지키는<br>방법을 함께 알아보아요!"</p>
+        </div>
+        <div class="closing">"오늘부터 인터넷을 사용할 때,<br>'이 발자국이 미래의 나에게 도움이 될까?' 한 번 생각해 보세요!"</div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="nav-controls">
+        <button class="nav-btn" onclick="prevSlide()">◀</button>
+        <span class="slide-counter" id="slideCounter">1 / 11</span>
+        <button class="nav-btn" onclick="nextSlide()">▶</button>
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 11;
+
+        function updateSlide() {
+            document.querySelectorAll('.slide').forEach(slide => {
+                const num = parseInt(slide.dataset.slide);
+                slide.classList.remove('active', 'prev');
+                if (num === currentSlide) slide.classList.add('active');
+                else if (num < currentSlide) slide.classList.add('prev');
+            });
+            document.getElementById('slideCounter').textContent = `${currentSlide} / ${totalSlides}`;
+            document.getElementById('progressBar').style.width = `${(currentSlide / totalSlides) * 100}%`;
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides) { currentSlide++; updateSlide(); }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 1) { currentSlide--; updateSlide(); }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'Enter') { e.preventDefault(); nextSlide(); }
+            if (e.key === 'ArrowLeft' || e.key === 'Backspace') { e.preventDefault(); prevSlide(); }
+        });
+
+        let touchStartX = 0;
+        document.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; });
+        document.addEventListener('touchend', (e) => {
+            const diff = touchStartX - e.changedTouches[0].clientX;
+            if (Math.abs(diff) > 50) { diff > 0 ? nextSlide() : prevSlide(); }
+        });
+    </script>
+</body>
+</html>

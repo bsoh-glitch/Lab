@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1차시 - 디지털 세상 속의 나, 나를 소개합니다!</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: #1a1a2e;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        .presentation {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            pointer-events: none;
+        }
+
+        .slide.active {
+            opacity: 1;
+            transform: translateX(0);
+            pointer-events: all;
+        }
+
+        .slide.prev {
+            opacity: 0;
+            transform: translateX(-100%);
+        }
+
+        /* Slide 1 - Title */
+        .slide-1 {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            text-align: center;
+        }
+
+        .slide-1 .badge {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 8px 24px;
+            border-radius: 50px;
+            font-size: 1rem;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .slide-1 h1 {
+            font-size: 3.2rem;
+            color: white;
+            font-weight: 900;
+            line-height: 1.3;
+            margin-bottom: 20px;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+
+        .slide-1 .subtitle {
+            font-size: 1.4rem;
+            color: rgba(255,255,255,0.9);
+            font-weight: 300;
+        }
+
+        .slide-1 .emoji-row {
+            font-size: 4rem;
+            margin-top: 30px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        /* Slide 2 - Learning Objectives */
+        .slide-2 {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            text-align: left;
+        }
+
+        .slide-2 h2 {
+            font-size: 2.4rem;
+            color: white;
+            margin-bottom: 40px;
+            width: 100%;
+        }
+
+        .objective-card {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 24px 32px;
+            margin-bottom: 16px;
+            width: 100%;
+            max-width: 800px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transform: translateY(20px);
+            opacity: 0;
+            animation: slideUp 0.5s forwards;
+        }
+
+        .objective-card:nth-child(2) { animation-delay: 0.2s; }
+        .objective-card:nth-child(3) { animation-delay: 0.4s; }
+        .objective-card:nth-child(4) { animation-delay: 0.6s; }
+
+        @keyframes slideUp {
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .objective-number {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.4rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .objective-text {
+            font-size: 1.2rem;
+            color: #333;
+            line-height: 1.5;
+        }
+
+        /* Slide 3 - Question */
+        .slide-3 {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            text-align: center;
+        }
+
+        .question-bubble {
+            background: white;
+            border-radius: 30px;
+            padding: 50px 60px;
+            max-width: 700px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            position: relative;
+        }
+
+        .question-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-top: 20px solid white;
+        }
+
+        .question-bubble h2 {
+            font-size: 2.2rem;
+            color: #333;
+            line-height: 1.5;
+        }
+
+        .question-bubble .emoji {
+            font-size: 5rem;
+            margin-bottom: 20px;
+        }
+
+        /* Slide 4 - Digital World */
+        .slide-4 {
+            background: linear-gradient(135deg, #0c3547 0%, #1a6b8a 50%, #23a6d5 100%);
+            text-align: center;
+        }
+
+        .slide-4 h2 {
+            font-size: 2.6rem;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        .device-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            max-width: 700px;
+        }
+
+        .device-card {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px 20px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: transform 0.3s, background 0.3s;
+        }
+
+        .device-card:hover {
+            transform: translateY(-8px);
+            background: rgba(255,255,255,0.25);
+        }
+
+        .device-card .icon {
+            font-size: 3rem;
+            margin-bottom: 12px;
+        }
+
+        .device-card .label {
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        /* Slide 5 - Digital Identity */
+        .slide-5 {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            text-align: center;
+        }
+
+        .slide-5 h2 {
+            font-size: 2.6rem;
+            color: #4a3728;
+            margin-bottom: 30px;
+        }
+
+        .identity-definition {
+            background: white;
+            border-radius: 24px;
+            padding: 40px;
+            max-width: 750px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+        }
+
+        .identity-definition p {
+            font-size: 1.3rem;
+            color: #555;
+            line-height: 1.8;
+        }
+
+        .identity-definition .highlight {
+            color: #e74c3c;
+            font-weight: 700;
+        }
+
+        .identity-examples {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .identity-tag {
+            background: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            color: #764ba2;
+            font-weight: 500;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        /* Slide 6 - Real vs Digital Me */
+        .slide-6 {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+        }
+
+        .slide-6 h2 {
+            font-size: 2.4rem;
+            color: #333;
+            margin-bottom: 40px;
+            text-align: center;
+            width: 100%;
+        }
+
+        .comparison-container {
+            display: flex;
+            gap: 40px;
+            max-width: 900px;
+            width: 100%;
+        }
+
+        .comparison-box {
+            flex: 1;
+            background: white;
+            border-radius: 24px;
+            padding: 36px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+        }
+
+        .comparison-box h3 {
+            font-size: 1.6rem;
+            margin-bottom: 20px;
+            text-align: center;
+            padding-bottom: 16px;
+            border-bottom: 3px solid;
+        }
+
+        .comparison-box.real h3 {
+            color: #2ecc71;
+            border-color: #2ecc71;
+        }
+
+        .comparison-box.digital h3 {
+            color: #3498db;
+            border-color: #3498db;
+        }
+
+        .comparison-item {
+            padding: 12px 0;
+            font-size: 1.15rem;
+            color: #555;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .comparison-item .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .real .dot { background: #2ecc71; }
+        .digital .dot { background: #3498db; }
+
+        /* Slide 7 - Activity */
+        .slide-7 {
+            background: linear-gradient(135deg, #f7971e 0%, #ffd200 100%);
+            text-align: center;
+        }
+
+        .slide-7 h2 {
+            font-size: 2.6rem;
+            color: white;
+            margin-bottom: 16px;
+            text-shadow: 0 3px 10px rgba(0,0,0,0.15);
+        }
+
+        .activity-desc {
+            font-size: 1.2rem;
+            color: rgba(255,255,255,0.95);
+            margin-bottom: 36px;
+            max-width: 700px;
+        }
+
+        .activity-steps {
+            display: flex;
+            gap: 20px;
+            max-width: 900px;
+        }
+
+        .activity-step {
+            background: white;
+            border-radius: 20px;
+            padding: 30px 24px;
+            flex: 1;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .activity-step .step-icon {
+            font-size: 3rem;
+            margin-bottom: 16px;
+        }
+
+        .activity-step .step-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .activity-step .step-desc {
+            font-size: 0.95rem;
+            color: #777;
+            line-height: 1.5;
+        }
+
+        /* Slide 8 - Digital Self-Intro Card */
+        .slide-8 {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            text-align: center;
+        }
+
+        .slide-8 h2 {
+            font-size: 2.4rem;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .card-preview {
+            background: white;
+            border-radius: 24px;
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+        }
+
+        .card-preview .avatar {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+        }
+
+        .card-preview .nickname {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 12px;
+        }
+
+        .card-preview .likes {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-bottom: 16px;
+        }
+
+        .card-preview .like-tag {
+            background: #f0f0f0;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.95rem;
+            color: #555;
+        }
+
+        .card-preview .intro {
+            font-size: 1.1rem;
+            color: #888;
+            font-style: italic;
+        }
+
+        .card-warning {
+            margin-top: 24px;
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 20px;
+            max-width: 500px;
+        }
+
+        .card-warning p {
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .card-warning .warning-icon {
+            font-size: 1.5rem;
+            margin-right: 8px;
+        }
+
+        /* Slide 9 - Summary */
+        .slide-9 {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            text-align: center;
+        }
+
+        .slide-9 h2 {
+            font-size: 2.6rem;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        .summary-cards {
+            display: flex;
+            gap: 20px;
+            max-width: 900px;
+        }
+
+        .summary-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px 24px;
+            flex: 1;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .summary-card .card-num {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #11998e, #38ef7d);
+            border-radius: 50%;
+            margin: 0 auto 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        .summary-card p {
+            font-size: 1.1rem;
+            color: #444;
+            line-height: 1.6;
+        }
+
+        /* Slide 10 - Next Class */
+        .slide-10 {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            text-align: center;
+        }
+
+        .slide-10 .next-icon {
+            font-size: 5rem;
+            margin-bottom: 20px;
+        }
+
+        .slide-10 h2 {
+            font-size: 2.4rem;
+            color: white;
+            margin-bottom: 16px;
+        }
+
+        .slide-10 .next-title {
+            font-size: 1.6rem;
+            color: rgba(255,255,255,0.9);
+            margin-bottom: 30px;
+        }
+
+        .slide-10 .next-box {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px 40px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .slide-10 .next-box p {
+            font-size: 1.3rem;
+            color: white;
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        .nav-controls {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            z-index: 100;
+        }
+
+        .nav-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255,255,255,0.3);
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255,255,255,0.35);
+            transform: scale(1.1);
+        }
+
+        .slide-counter {
+            color: white;
+            font-size: 1rem;
+            font-weight: 500;
+            background: rgba(0,0,0,0.2);
+            padding: 8px 16px;
+            border-radius: 20px;
+        }
+
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: rgba(255,255,255,0.8);
+            transition: width 0.3s;
+            z-index: 100;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .slide { padding: 30px; }
+            .slide-1 h1 { font-size: 2rem; }
+            h2 { font-size: 1.8rem !important; }
+            .comparison-container { flex-direction: column; gap: 20px; }
+            .activity-steps { flex-direction: column; }
+            .summary-cards { flex-direction: column; }
+            .device-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-bar" id="progressBar"></div>
+
+    <div class="presentation" id="presentation">
+        <!-- Slide 1: Title -->
+        <div class="slide slide-1 active" data-slide="1">
+            <div class="badge">1차시 · 디지털 자아와 정체성</div>
+            <h1>디지털 세상 속의 나,<br>나를 소개합니다!</h1>
+            <div class="subtitle">경기도 안양시 초등학교 디지털 시민 역량교육</div>
+            <div class="emoji-row">🌐 👤 ✨</div>
+        </div>
+
+        <!-- Slide 2: Learning Objectives -->
+        <div class="slide slide-2" data-slide="2">
+            <h2>📚 오늘의 학습 목표</h2>
+            <div class="objective-card">
+                <div class="objective-number">1</div>
+                <div class="objective-text">디지털 세상과 현실 세상에서의 '나'의 모습을 비교할 수 있다.</div>
+            </div>
+            <div class="objective-card">
+                <div class="objective-number">2</div>
+                <div class="objective-text">디지털 정체성의 의미를 이해하고 설명할 수 있다.</div>
+            </div>
+            <div class="objective-card">
+                <div class="objective-number">3</div>
+                <div class="objective-text">온라인에서 나를 소개하는 바람직한 방법을 알 수 있다.</div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Warm-up Question -->
+        <div class="slide slide-3" data-slide="3">
+            <div class="question-bubble">
+                <div class="emoji">🤔</div>
+                <h2>여러분, 혹시 온라인에서<br>프로필을 만들어 본 적<br>있나요?</h2>
+            </div>
+        </div>
+
+        <!-- Slide 4: Digital World -->
+        <div class="slide slide-4" data-slide="4">
+            <h2>🌍 디지털 세상이란?</h2>
+            <div class="device-grid">
+                <div class="device-card">
+                    <div class="icon">📱</div>
+                    <div class="label">스마트폰</div>
+                </div>
+                <div class="device-card">
+                    <div class="icon">💻</div>
+                    <div class="label">노트북/컴퓨터</div>
+                </div>
+                <div class="device-card">
+                    <div class="icon">📟</div>
+                    <div class="label">태블릿</div>
+                </div>
+                <div class="device-card">
+                    <div class="icon">🎮</div>
+                    <div class="label">게임기</div>
+                </div>
+                <div class="device-card">
+                    <div class="icon">⌚</div>
+                    <div class="label">스마트워치</div>
+                </div>
+                <div class="device-card">
+                    <div class="icon">📺</div>
+                    <div class="label">스마트TV</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Digital Identity -->
+        <div class="slide slide-5" data-slide="5">
+            <h2>🪪 디지털 정체성이란?</h2>
+            <div class="identity-definition">
+                <p>디지털 정체성이란<br>
+                <span class="highlight">온라인 세상에서 다른 사람들이<br>나를 알아볼 수 있게 하는 모든 정보</span>예요.</p>
+            </div>
+            <div class="identity-examples">
+                <div class="identity-tag">🏷️ 닉네임</div>
+                <div class="identity-tag">📸 프로필 사진</div>
+                <div class="identity-tag">📝 게시글</div>
+                <div class="identity-tag">💬 댓글</div>
+                <div class="identity-tag">❤️ 좋아요</div>
+                <div class="identity-tag">🎵 공유한 음악</div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Real vs Digital -->
+        <div class="slide slide-6" data-slide="6">
+            <h2>현실의 나 🆚 디지털 세상의 나</h2>
+            <div class="comparison-container">
+                <div class="comparison-box real">
+                    <h3>🏠 현실의 나</h3>
+                    <div class="comparison-item"><span class="dot"></span> 진짜 이름</div>
+                    <div class="comparison-item"><span class="dot"></span> 실제 얼굴과 목소리</div>
+                    <div class="comparison-item"><span class="dot"></span> 직접 만나는 친구</div>
+                    <div class="comparison-item"><span class="dot"></span> 표정으로 감정 전달</div>
+                </div>
+                <div class="comparison-box digital">
+                    <h3>💻 디지털의 나</h3>
+                    <div class="comparison-item"><span class="dot"></span> 닉네임/아이디</div>
+                    <div class="comparison-item"><span class="dot"></span> 프로필 사진/아바타</div>
+                    <div class="comparison-item"><span class="dot"></span> 온라인으로 소통하는 친구</div>
+                    <div class="comparison-item"><span class="dot"></span> 이모지/이모티콘으로 표현</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: Activity 1 -->
+        <div class="slide slide-7" data-slide="7">
+            <h2>✏️ 활동: 나의 두 가지 모습</h2>
+            <p class="activity-desc">활동지에 현실의 나와 디지털 세상의 나를 그림과 글로 자유롭게 표현해 봅시다!</p>
+            <div class="activity-steps">
+                <div class="activity-step">
+                    <div class="step-icon">👈</div>
+                    <div class="step-title">왼쪽: 현실의 나</div>
+                    <div class="step-desc">좋아하는 것, 잘하는 것,<br>나의 성격 등</div>
+                </div>
+                <div class="activity-step">
+                    <div class="step-icon">👉</div>
+                    <div class="step-title">오른쪽: 디지털의 나</div>
+                    <div class="step-desc">닉네임, 자주 하는 활동,<br>온라인 관심사 등</div>
+                </div>
+                <div class="activity-step">
+                    <div class="step-icon">🗣️</div>
+                    <div class="step-title">모둠 공유</div>
+                    <div class="step-desc">친구들과 돌려보며<br>이야기 나누기</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8: Activity 2 - Digital Self-Intro Card -->
+        <div class="slide slide-8" data-slide="8">
+            <h2>🎨 디지털 자기소개 카드 만들기</h2>
+            <div class="card-preview">
+                <div class="avatar">🦊</div>
+                <div class="nickname">별빛여우</div>
+                <div class="likes">
+                    <span class="like-tag">🎨 그림 그리기</span>
+                    <span class="like-tag">📖 독서</span>
+                    <span class="like-tag">🎵 음악 듣기</span>
+                </div>
+                <div class="intro">"세상의 모든 색깔을 좋아하는 여우입니다!"</div>
+            </div>
+            <div class="card-warning">
+                <p><span class="warning-icon">⚠️</span> 주의! 실명, 학교 이름, 전화번호 등 개인정보는 넣지 않아요!</p>
+            </div>
+        </div>
+
+        <!-- Slide 9: Summary -->
+        <div class="slide slide-9" data-slide="9">
+            <h2>📌 오늘 배운 내용 정리</h2>
+            <div class="summary-cards">
+                <div class="summary-card">
+                    <div class="card-num">1</div>
+                    <p><strong>디지털 정체성</strong>이란<br>온라인에서 나를 나타내는<br>모든 정보이다.</p>
+                </div>
+                <div class="summary-card">
+                    <div class="card-num">2</div>
+                    <p>현실의 나와<br>디지털 세상의 나는<br><strong>같을 수도, 다를 수도</strong> 있다.</p>
+                </div>
+                <div class="summary-card">
+                    <div class="card-num">3</div>
+                    <p>온라인에서 나를 소개할 때<br><strong>개인정보를 조심</strong>해야<br>한다.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10: Next Class -->
+        <div class="slide slide-10" data-slide="10">
+            <div class="next-icon">👣</div>
+            <h2>다음 시간 예고</h2>
+            <div class="next-title">2차시: 내가 남긴 디지털 발자국을 찾아서</div>
+            <div class="next-box">
+                <p>"인터넷에서도 발자국이 남는다고?<br>나도 모르게 남긴 디지털 발자국을<br>함께 찾아보아요!"</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="nav-controls">
+        <button class="nav-btn" onclick="prevSlide()">◀</button>
+        <span class="slide-counter" id="slideCounter">1 / 10</span>
+        <button class="nav-btn" onclick="nextSlide()">▶</button>
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 10;
+
+        function updateSlide() {
+            document.querySelectorAll('.slide').forEach(slide => {
+                const num = parseInt(slide.dataset.slide);
+                slide.classList.remove('active', 'prev');
+                if (num === currentSlide) slide.classList.add('active');
+                else if (num < currentSlide) slide.classList.add('prev');
+            });
+            document.getElementById('slideCounter').textContent = `${currentSlide} / ${totalSlides}`;
+            document.getElementById('progressBar').style.width = `${(currentSlide / totalSlides) * 100}%`;
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides) { currentSlide++; updateSlide(); }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 1) { currentSlide--; updateSlide(); }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'Enter') { e.preventDefault(); nextSlide(); }
+            if (e.key === 'ArrowLeft' || e.key === 'Backspace') { e.preventDefault(); prevSlide(); }
+        });
+
+        // Touch support
+        let touchStartX = 0;
+        document.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; });
+        document.addEventListener('touchend', (e) => {
+            const diff = touchStartX - e.changedTouches[0].clientX;
+            if (Math.abs(diff) > 50) { diff > 0 ? nextSlide() : prevSlide(); }
+        });
+    </script>
+</body>
+</html>
